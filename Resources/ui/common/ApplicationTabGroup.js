@@ -9,14 +9,7 @@ function ApplicationTabGroup(Window) {
 	var win1 = Titanium.UI.createWindow({
 		title : 'User Authentication Demo',
 		tabBarHidden : true,
-<<<<<<< HEAD
-
 		 url : '/ui/common/login.js'
-
-
-=======
-		url : 'login.js'
->>>>>>> 079b28e9b2a5d7c31673c07ce131da587f119d0d
 	});
 	
 	var win2 = new Window(L('settings'));
