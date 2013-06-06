@@ -1,18 +1,25 @@
 function ApplicationTabGroup(Window) {
 	//create module instance
 	var self = Ti.UI.createTabGroup();
+	
+	//load component dependencies
+	var Post = require('post');
 
+	
 	//create app tabs
 	var win1 = Titanium.UI.createWindow({
-		title : 'User Authentication Demo',
+		title : 'Post a Job',
 		tabBarHidden : true,
-		url : 'login.js'
 	});
+	
+		//construct UI
+	var post = new Post();
+	win1.add(post);
 	
 	var win2 = new Window(L('settings'));
 
 	var tab1 = Ti.UI.createTab({
-		title : L('home'),
+		title : L('Post a Job'),
 		icon : '/images/KS_nav_ui.png',
 		window : win1
 	});
