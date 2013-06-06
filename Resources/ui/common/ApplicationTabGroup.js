@@ -4,24 +4,20 @@ function ApplicationTabGroup(Window) {
 	// var self = Ti.UI.createTabGroup();
 
 	var self = Ti.UI.createTabGroup();
-	
-	//load component dependencies
-	var Post = require('post');
 
-	
 	//create app tabs
 	var win1 = Titanium.UI.createWindow({
-		title : 'Post a Job',
+		title : 'User Authentication Demo',
 		tabBarHidden : true,
+<<<<<<< HEAD
 
 		 url : '/ui/common/login.js'
 
 
+=======
+		url : 'login.js'
+>>>>>>> 079b28e9b2a5d7c31673c07ce131da587f119d0d
 	});
-	
-		//construct UI
-	var post = new Post();
-	win1.add(post);
 	
 	var win2 = new Window(L('settings'));
 
@@ -34,7 +30,7 @@ function ApplicationTabGroup(Window) {
 	// win1.containingTab = tab1;
 
 	var tab1 = Ti.UI.createTab({
-		title : L('Post a Job'),
+		title : L('home'),
 		icon : '/images/KS_nav_ui.png',
 		window : win1
 	});
