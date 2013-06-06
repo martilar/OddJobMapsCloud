@@ -1,6 +1,6 @@
 function ApplicationTabGroup(Window) {
 	//create module instance
-	var self = Ti.UI.createTabGroup();
+	// var self = Ti.UI.createTabGroup();
 
 	//create app tabs
 	var win1 = Titanium.UI.createWindow({
@@ -11,12 +11,12 @@ function ApplicationTabGroup(Window) {
 	
 	var win2 = new Window(L('settings'));
 
-	var tab1 = Ti.UI.createTab({
-		title : L('home'),
-		icon : '/images/KS_nav_ui.png',
-		window : win1
-	});
-	win1.containingTab = tab1;
+	// var tab1 = Ti.UI.createTab({
+		// title : L('home'),
+		// icon : '/images/KS_nav_ui.png',
+		// window : win1
+	// });
+	// win1.containingTab = tab1;
 
 	var tab2 = Ti.UI.createTab({
 		title : L('settings'),
@@ -25,7 +25,7 @@ function ApplicationTabGroup(Window) {
 	});
 	win2.containingTab = tab2;
 
-	self.addTab(tab1);
+	// self.addTab(tab1);
 	self.addTab(tab2);
 
 	return self;
