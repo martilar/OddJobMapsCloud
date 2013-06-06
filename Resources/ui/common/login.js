@@ -1,10 +1,9 @@
-
 var Cloud = require('ti.cloud');
 Cloud.debug = true;
 
 // Create a user
 // ACS app must be configured to use 3-legged OAuth
-Cloud.Users.secureCreate({
+Cloud.Users.secureLogin({
     title: 'Sign Up Here'
 }, function (e) {
     if (e.success) {
