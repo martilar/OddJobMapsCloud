@@ -1,0 +1,11 @@
+Tasks Remaining (add additional tasks as needed):
+
+* Job query
+* Handle unable to determine location/no GPS available - zip code, map?
+* Email generation from job details - need to access job owner's email address
+
+
+If time:
+* Manage posts screen
+* Manage account screen
+
