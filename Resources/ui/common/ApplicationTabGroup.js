@@ -9,18 +9,21 @@ function ApplicationTabGroup(Window) {
 	var win1 = Titanium.UI.createWindow({
 		title : 'User Authentication Demo',
 		tabBarHidden : true,
-<<<<<<< HEAD
-
 		 url : '/ui/common/login.js'
-
-
-=======
-		url : 'login.js'
->>>>>>> 079b28e9b2a5d7c31673c07ce131da587f119d0d
 	});
-	
+	win1.open();
 	var win2 = new Window(L('settings'));
 
+	Ti.App.addEventListener('loggedin', function(){
+		win1.close();
+		win2.open();
+	});
+	// var tab1 = Ti.UI.createTab({
+		// title : L('home'),
+		// icon : '/images/KS_nav_ui.png',
+		// window : win1
+	// });
+	// win1.containingTab = tab1;
 
 	// var tab1 = Ti.UI.createTab({
 		// title : L('home'),
@@ -29,23 +32,16 @@ function ApplicationTabGroup(Window) {
 	// });
 	// win1.containingTab = tab1;
 
-	var tab1 = Ti.UI.createTab({
-		title : L('home'),
-		icon : '/images/KS_nav_ui.png',
-		window : win1
-	});
-	win1.containingTab = tab1;
-
-
-	var tab2 = Ti.UI.createTab({
-		title : L('settings'),
-		icon : '/images/KS_nav_views.png',
-		window : win2
-	});
-	win2.containingTab = tab2;
+// 
+	// var tab2 = Ti.UI.createTab({
+		// title : L('settings'),
+		// icon : '/images/KS_nav_views.png',
+		// window : win2
+	// });
+	// win2.containingTab = tab2;
 
 	// self.addTab(tab1);
-	self.addTab(tab2);
+	// self.addTab(tab2);
 
 	return self;
 };

@@ -1,3 +1,20 @@
+var login = require('/ui/common/login');
+var nav = require('/ui/common/nav');
+var dat = require('dat');
+var map = require('/ui/common/map');
+var post = require('/ui/common/post');
+
+function getMyStoredAccessToken(){
+	
+	var seconds = new Date().getTime() / 1000 ;
+	var loginTime = Ti.App.Properties.getInt('loginTime', 0);
+	var expiresIn = Ti.App.Properties.getInt('expires', 0);
+	if ( loginTime + expiresIn < seconds ){
+		return Ti.App.Properties.getString('token', '');
+	} else {
+		return '';
+	}
+}
 /*
  * A tabbed application, consisting of multiple stacks of windows associated with tabs in a tab group.  
  * A starting point for tab-based application with multiple top-level windows. 
@@ -14,6 +31,60 @@
 if (Ti.version < 1.8 ) {
 	alert('Sorry - this application template requires Titanium Mobile SDK 1.8 or later');
 }
+var toLoginWin = Ti.UI.createWindow({
+	background : 'white',
+	layout : 'vertical',
+	navBarHidden : true
+});
+toLoginWin.open();
+var toLoginBtn = Ti.UI.createButton({
+	title : 'Login',
+	top: '5%',
+	width : Ti.UI.FILL
+});
+toLoginWin.add(toLoginBtn);
+var loginWin = login.createLoginWindow();
+
+
+toLoginBtn.addEventListener( 'click', function(){
+	
+	dat.unsetToken();
+	var loginWin = login.createLoginWindow();
+});
+
+var toMapBtn = Ti.UI.createButton({
+	title : 'Map',
+
+	width : Ti.UI.FILL
+});
+toLoginWin.add(toMapBtn);
+
+
+toMapBtn.addEventListener( 'click', function(){
+	var token = dat.getMyStoredAccessToken();
+	if (token){
+		var mapWin = map.createMapWindow();
+	} else{
+		var loginWin = login.createLoginWindow();
+	}
+});
+
+var toPostBtn = Ti.UI.createButton({
+	title : 'Post',
+
+	width : Ti.UI.FILL
+});
+toLoginWin.add(toPostBtn);
+
+toPostBtn.addEventListener( 'click', function(){
+	var token = dat.getMyStoredAccessToken();
+	if (token){
+		var postWin = map.createPostWindow();
+	} else{
+		var loginWin = login.createLoginWindow();
+	}
+});
+
 /*
 // this sets the background color of the master UIView (when there are no windows/tab groups on it)  
 Titanium.UI.setBackgroundColor('#fff');  
@@ -142,25 +213,25 @@ Cloud.Objects.query({
 });*/
 
 // This is a single context application with mutliple windows in a stack
-(function() {
-	//determine platform and form factor and render approproate components
-	var osname = Ti.Platform.osname,
-		version = Ti.Platform.version,
-		height = Ti.Platform.displayCaps.platformHeight,
-		width = Ti.Platform.displayCaps.platformWidth;
-	
-	//considering tablet to have one dimension over 900px - this is imperfect, so you should feel free to decide
-	//yourself what you consider a tablet form factor for android
-	var isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
-	
-	var Window;
-	if (isTablet) {
-		Window = require('ui/tablet/ApplicationWindow');
-	}
-	else {
-		Window = require('ui/handheld/ApplicationWindow');
-	}
-
-	var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
-	new ApplicationTabGroup(Window).open();
-})();
+// (function() {
+	// //determine platform and form factor and render approproate components
+	// var osname = Ti.Platform.osname,
+		// version = Ti.Platform.version,
+		// height = Ti.Platform.displayCaps.platformHeight,
+		// width = Ti.Platform.displayCaps.platformWidth;
+// 	
+	// //considering tablet to have one dimension over 900px - this is imperfect, so you should feel free to decide
+	// //yourself what you consider a tablet form factor for android
+	// var isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
+// 	
+	// var Window;
+	// if (isTablet) {
+		// Window = require('ui/tablet/ApplicationWindow');
+	// }
+	// else {
+		// Window = require('ui/handheld/ApplicationWindow');
+	// }
+// 
+	// var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+	// new ApplicationTabGroup(Window).open();
+// })();
