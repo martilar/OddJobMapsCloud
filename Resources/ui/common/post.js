@@ -1,4 +1,9 @@
 exports.createPostWindow = function() {
+	var win = Ti.UI.createWindow({
+		backgroundColor : "white",
+		layout : 'vertical',
+		navBarHidden : true
+	});
 	var self = Ti.UI.createView({
 		layout : 'vertical'
 	});
@@ -143,10 +148,11 @@ exports.createPostWindow = function() {
 	});
 
 	cancel.addEventListener('click', function(e) {
-		Ti.UI.currentWindow.close();
+		win.close();
 	});
 
-	return self;
+	win.add(self);
+	win.open();
 }
 
 // module.exports = Post;
