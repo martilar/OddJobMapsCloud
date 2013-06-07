@@ -1,4 +1,4 @@
-function Post() {
+exports.createPostWindow = function() {
 	var self = Ti.UI.createView({
 		layout : 'vertical'
 	});
@@ -149,4 +149,4 @@ function Post() {
 	return self;
 }
 
-module.exports = Post;
+// module.exports = Post;

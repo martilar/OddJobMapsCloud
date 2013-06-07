@@ -79,7 +79,7 @@ toLoginWin.add(toPostBtn);
 toPostBtn.addEventListener( 'click', function(){
 	var token = dat.getMyStoredAccessToken();
 	if (token){
-		var postWin = map.createPostWindow();
+		var postWin = post.createPostWindow();
 	} else{
 		var loginWin = login.createLoginWindow();
 	}

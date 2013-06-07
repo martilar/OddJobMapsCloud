@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 var dat = require('/dat');
 
 // function getMyStoredAccessToken(){
@@ -57,4 +57,4 @@ Cloud.Users.secureLogin({
 });
 
 }
-
+}
