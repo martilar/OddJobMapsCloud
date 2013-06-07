@@ -70,5 +70,5 @@ if (osname == 'android') {
 	});
 }
 win.add(map);
-	win.open;	
+	win.open();	
 }
