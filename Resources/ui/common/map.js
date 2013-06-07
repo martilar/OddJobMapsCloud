@@ -1,3 +1,13 @@
+function mapQuery(lat, long, latdelt){
+	var Cloud = require('ti.cloud');
+	Cloud.debug = true;
+	Cloud.Objects.query({
+		classname : 'jobs',
+		limit : 100,
+		where : { "coordinates":{"$nearSphere":[lat, long], "$maxDistance" : latdelt }},
+	})
+}
+
 exports.createMapWindow = function(){
 	var win = Ti.UI.createWindow({
 	backgroundColor : "white",
@@ -6,6 +16,28 @@ exports.createMapWindow = function(){
 	});
 
 	var osname = Ti.Platform.osname;
+
+	var latitude;
+	var longitude;
+	var	latitudeDelta = 0.1;
+	var	longitudeDelta = 0.1;
+
+	var loc = Ti.Geolocation.getCurrentPosition(function(e) {
+		if (e.error) {
+			alert('Cannot get your current location, using default..');
+			latitude = 0;
+			longitude = 0;
+			return;
+		} else {
+			alert('Success getting location');
+			latitude = e.coords.latitude;
+			longitude = e.coords.longitude;
+			return;
+		}
+	});
+	
+	
+
 
 if (osname == 'android') {
 
@@ -83,3 +115,4 @@ backBtn.addEventListener('click', function(){
 win.add(backBtn);
 	win.open();	
 }
+
