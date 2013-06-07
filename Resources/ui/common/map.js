@@ -1,5 +1,10 @@
-function mapQuery(lat, lon, longdelt, callback, win){
+function mapQuery(view){
+	var osname = Ti.Platform.osname;
 	var Cloud = require('ti.cloud');
+	var region = view.getRegion();
+	var lat = region.latitude;
+	var lon = region.longitude;
+	var longdelt = region.longitudeDelta;
 	var radians = 180*longdelt/3.14;
 	Cloud.debug = true;
 	jobs = Cloud.Objects.query({
@@ -8,33 +13,43 @@ function mapQuery(lat, lon, longdelt, callback, win){
 		where : { 
 			"coordinates":{"$nearSphere":[lon, lat], "$maxDistance" : radians }
 			}	
-	}, function(e) {
+	}, function(e, view) {
 		if(e.success){
-			alert('Success:\n' + 'Count: ' + e.jobs.length + e.jobs[0].description);
-			callback(e.jobs, win);
+			alert('Success:\n' + 'Count: ' + e.jobs.length + e.jobs[0].description+e.jobs[0].coordinates[0]);
+			// var jobs = e.jobs;
+			var annot = new Array();
+			for(var i = 0 ; i < e.jobs.length ; i++ ){
+				if (osname == 'android'){
+				annot[i] = MapModule.createAnnotation({
+				latitude : e.jobs[i].coordinates[0][1],
+				longitude : e.jobs[i].coordinates[0][0],
+				title : e.jobs[i].description,
+				subtitle : e.jobs[i].time_estimate + " hours \n$" + e.jobs[i].wage +"\nexpires " + e.jobs[i].expiration,
+				animate : true,
+				leftView: Ti.UI.createButton({title :'contact Poster'}) 
+				});
+				} else {
+				annot[i] = Titanium.Map.createAnnotation({
+				latitude : e.jobs[i].coordinates[0][1],
+				longitude : e.jobs[i].coordinates[0][0],
+				title : e.jobs[i].description,
+				subtitle : e.jobs[i].time_estimate + " hours \n$" + e.jobs[i].wage +"\nexpires " + e.jobs[i].expiration,
+				animate : true,
+				leftView: Ti.UI.createButton({title :'contact Poster'}) 
+				});
+				}
+			}
+			view.addAnnotations(annot);
+			var viewAnnot = view.getAnnotations();
+			alert('viewAnnot ' + viewAnnot[0].title);
 		}else {
-        alert('Error:\n' +
-            ((e.error && e.message) || JSON.stringify(e)));
+        alert('Error:\n' +((e.error && e.message) || JSON.stringify(e)));
    		}
 	});
 	
 }
 
-var callback = function(jobs, win){
-		
-		for(var i = 0 ; i < jobs.length ; i++ ){
-		var job = jobs[i];
-		annot[i] = MapModule.createAnnotation({
-			latitude : job.coordinates[1],
-			longitude : job.coordinates[0],
-			title : job.description,
-			subtitle : job.time_estimate + " hours \n$" + job.wage +"\nexpires " + job.expiration,
-			animate : true,
-			leftView: Ti.UI.createButton({title :'contactPoster'}) 
-		});
-		win.add(annot[i]);
-	}
-};
+
 
 exports.createMapWindow = function(){
 	var win = Ti.UI.createWindow({
@@ -65,8 +80,8 @@ exports.createMapWindow = function(){
 	});
 	
 
-mapQuery(lat, lon, longitudeDelta, callback, win );
-alert(JSON.stringify(jobs));
+
+// alert(JSON.stringify(jobs));
 var annot = new Array();
 	
 
@@ -104,7 +119,7 @@ if (osname == 'android') {
 		width : Titanium.UI.Fill,
 		top : 0,
 		left : 0,
-		annotations : annot
+		// annotations : 
 	});
 } else {
 
@@ -139,6 +154,10 @@ if (osname == 'android') {
 	});
 }
 win.add(map);
+
+
+mapQuery( map );
+
 var backBtn = Ti.UI.createButton({
 	title : 'Back',
 	width : Ti.UI.FILL,
