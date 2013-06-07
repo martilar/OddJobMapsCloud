@@ -1,4 +1,6 @@
 exports.createPostWindow = function() {
+	var osname = Ti.Platform.osname;
+	
 	var win = Ti.UI.createWindow({
 		backgroundColor : "white",
 		layout : 'vertical',
@@ -15,7 +17,7 @@ exports.createPostWindow = function() {
 	var longitude;
 	var loc = Ti.Geolocation.getCurrentPosition(function(e) {
 		if (e.error) {
-			alert('Cannot get your current location, using default..');
+			alert('Cannot get your current location, please manually set your location.');
 			latitude = 0;
 			longitude = 0;
 			return;
@@ -26,7 +28,139 @@ exports.createPostWindow = function() {
 			return;
 		}
 	});
+	// Manual location button
+	var loc_button = Ti.UI.createButton({
+		color : '#000000',
+		title : 'Manually set location..',
+		width : Ti.UI.FILL,
+		padding : 10
+	});
 
+	loc_button.addEventListener('click', function(e) {
+		var mapWindow = Ti.UI.createWindow({
+			backgroundColor : "white",
+			layout : 'vertical',
+			navBarHidden : true
+		});
+
+		if (osname == 'android') {
+			var MapModule = require('ti.map');
+			
+			// android specific code
+			var locPin = MapModule.createAnnotation({
+				latitude : latitude,
+				longitude : longitude,
+				title : "Job Location",
+				pincolor : MapModule.ANNOTATION_RED,
+				animate : true,
+				draggable : true,
+				leftView: Ti.UI.createButton({title: 'Detail'}),
+				myid : 1 // Custom property to uniquely identify this annotation.
+			});
+
+			var map = MapModule.createView({
+				height : '95%',
+				userLocation : true,
+				mapType : MapModule.NORMAL_TYPE,
+				animate : true,
+				region : {
+					latitude : latitude,
+					longitude : longitude,
+					latitudeDelta : 0.1,
+					longitudeDelta : 0.1
+				},
+				top : 0,
+				left : 0,
+				annotations : [locPin]
+			});
+		} else {
+			// code
+			var locPin = Titanium.Map.createAnnotation({
+				latitude : latitude,
+				longitude : longitude,
+				title : "Job Location",
+				pincolor : Titanium.Map.ANNOTATION_RED,
+				animate : true,
+				draggable : true,
+				leftButton : Titanium.UI.iPhone.SystemButton.INFO_LIGHT,
+				myid : 1 // Custom property to uniquely identify this annotation.
+			});
+
+			var map = Titanium.Map.createView({
+				height : '95%',
+				userLocation : true,
+				mapType : Titanium.Map.STANDARD_TYPE,
+				animate : true,
+				region : {
+					latitude : latitude,
+					longitude : longitude,
+					latitudeDelta : 0.1,
+					longitudeDelta : 0.1
+				},
+				top : 0,
+				left : 0,
+				annotations : [locPin]
+			});
+		}
+
+		var doneButton = Ti.UI.createButton({
+			color : '#000000',
+			title : 'Okay',
+			width : Ti.UI.FILL,
+			padding : 10
+		});
+
+		doneButton.addEventListener('click',function(e) {
+			// Set new latitude and longitude
+			latitude = locPin.getLatitude();
+			longitude = locPin.getLongitude();
+			// Close map window
+			mapWindow.close();
+		});
+
+		mapWindow.add(map);
+		mapWindow.add(doneButton);
+		mapWindow.open();
+	});
+	
+	self.add(loc_button);
+	/*
+	var long_label = Ti.UI.createLabel({
+		color : '#000000',
+		text : 'Longitude',
+		// height : '50%',
+		width : Ti.UI.FILL
+	});
+
+	var long_field = Ti.UI.createTextField({
+		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
+		color : '#336699',
+		value : longitude,
+		width : Ti.UI.FILL
+
+	});
+
+	var lat_label = Ti.UI.createLabel({
+		color : '#000000',
+		text : 'Latitude',
+		// height : '50%',
+		width : Ti.UI.FILL
+	});
+
+	var lat_field = Ti.UI.createTextField({
+		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
+		color : '#336699',
+		value : latitude,
+		width : Ti.UI.FILL
+
+	});
+
+
+	self.add(long_label);
+	self.add(long_field);
+	self.add(lat_label);
+	self.add(lat_field);
+*/
 	// Form fields:
 	// Description
 	var description_label = Ti.UI.createLabel({
@@ -106,7 +240,7 @@ exports.createPostWindow = function() {
 	var label = Ti.UI.createButton({
 		color : '#000000',
 		title : 'Post',
-		
+
 		width : Ti.UI.FILL,
 		padding : 10
 	});
@@ -115,8 +249,8 @@ exports.createPostWindow = function() {
 	var cancel = Ti.UI.createButton({
 		color : '#000000',
 		title : 'Cancel',
-		
-		width : Ti.UI.FILL,		
+
+		width : Ti.UI.FILL,
 		padding : 10
 	});
 
@@ -151,5 +285,4 @@ exports.createPostWindow = function() {
 	win.add(self);
 	win.open();
 }
-
 // module.exports = Post;
