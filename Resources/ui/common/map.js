@@ -1,4 +1,4 @@
-function mapQuery(lat, lon, longdelt){
+function mapQuery(lat, lon, longdelt, callback){
 	var Cloud = require('ti.cloud');
 	var radians = 180*longdelt/3.14;
 	Cloud.debug = true;
@@ -17,10 +17,10 @@ function mapQuery(lat, lon, longdelt){
             ((e.error && e.message) || JSON.stringify(e)));
    		}
 	});
-
-		return jobs;
 	
 }
+
+
 
 exports.createMapWindow = function(){
 	var win = Ti.UI.createWindow({
