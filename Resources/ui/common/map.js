@@ -1,4 +1,4 @@
-function mapQuery(lat, lon, longdelt, callback){
+function mapQuery(lat, lon, longdelt, callback, win){
 	var Cloud = require('ti.cloud');
 	var radians = 180*longdelt/3.14;
 	Cloud.debug = true;
@@ -11,7 +11,7 @@ function mapQuery(lat, lon, longdelt, callback){
 	}, function(e) {
 		if(e.success){
 			alert('Success:\n' + 'Count: ' + e.jobs.length + e.jobs[0].description);
-			return e.jobs;
+			callback(e.jobs, win);
 		}else {
         alert('Error:\n' +
             ((e.error && e.message) || JSON.stringify(e)));
@@ -20,7 +20,21 @@ function mapQuery(lat, lon, longdelt, callback){
 	
 }
 
-
+var callback = function(jobs, win){
+		
+		for(var i = 0 ; i < jobs.length ; i++ ){
+		var job = jobs[i];
+		annot[i] = MapModule.createAnnotation({
+			latitude : job.coordinates[1],
+			longitude : job.coordinates[0],
+			title : job.description,
+			subtitle : job.time_estimate + " hours \n$" + job.wage +"\nexpires " + job.expiration,
+			animate : true,
+			leftView: Ti.UI.createButton({title :'contactPoster'}) 
+		});
+		win.add(annot[i]);
+	}
+};
 
 exports.createMapWindow = function(){
 	var win = Ti.UI.createWindow({
@@ -51,7 +65,7 @@ exports.createMapWindow = function(){
 	});
 	
 
-var jobs = mapQuery(lat, lon, longitudeDelta );
+mapQuery(lat, lon, longitudeDelta, callback, win );
 alert(JSON.stringify(jobs));
 var annot = new Array();
 	
@@ -61,18 +75,7 @@ if (osname == 'android') {
 
 	var MapModule = require('ti.map');
 	
-	for(var i = 0 ; i < jobs.jobs.length ; i++ ){
-		var job = jobs.jobs[i];
-		annot[i] = MapModule.createAnnotation({
-			latitude : job.coordinates[1],
-			longitude : job.coordinates[0],
-			title : job.description,
-			subtitle : job.time_estimate + " hours \n$" + job.wage +"\nexpires " + job.expiration,
-			animate : true,
-			leftView: Ti.UI.createButton({title :'contactPoster'}) 
-		});
-	}
-	
+
 	
 	var osu = MapModule.createAnnotation({
 		latitude : 44.5646,
