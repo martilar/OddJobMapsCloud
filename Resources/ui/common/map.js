@@ -1,11 +1,25 @@
-function mapQuery(lat, long, latdelt){
+function mapQuery(lat, lon, longdelt){
 	var Cloud = require('ti.cloud');
+	var radians = 180*longdelt/3.14;
 	Cloud.debug = true;
-	Cloud.Objects.query({
+	jobs = Cloud.Objects.query({
 		classname : 'jobs',
 		limit : 100,
-		where : { "coordinates":{"$nearSphere":[lat, long], "$maxDistance" : latdelt }},
-	})
+		where : { 
+			"coordinates":{"$nearSphere":[lon, lat], "$maxDistance" : radians }
+			}	
+	}, function(e) {
+		if(e.success){
+			alert('Success:\n' + 'Count: ' + e.jobs.length + e.jobs[0].description);
+			return e.jobs;
+		}else {
+        alert('Error:\n' +
+            ((e.error && e.message) || JSON.stringify(e)));
+   		}
+	});
+
+		return jobs;
+	
 }
 
 exports.createMapWindow = function(){
@@ -17,8 +31,8 @@ exports.createMapWindow = function(){
 
 	var osname = Ti.Platform.osname;
 
-	var latitude;
-	var longitude;
+	var lat;
+	var lon;
 	var	latitudeDelta = 0.1;
 	var	longitudeDelta = 0.1;
 
@@ -30,18 +44,36 @@ exports.createMapWindow = function(){
 			return;
 		} else {
 			alert('Success getting location');
-			latitude = e.coords.latitude;
-			longitude = e.coords.longitude;
+			lat = e.coords.latitude;
+			lon = e.coords.longitude;
 			return;
 		}
 	});
 	
+
+var jobs = mapQuery(lat, lon, longitudeDelta );
+alert(JSON.stringify(jobs));
+var annot = new Array();
 	
 
 
 if (osname == 'android') {
 
 	var MapModule = require('ti.map');
+	
+	for(var i = 0 ; i < jobs.jobs.length ; i++ ){
+		var job = jobs.jobs[i];
+		annot[i] = MapModule.createAnnotation({
+			latitude : job.coordinates[1],
+			longitude : job.coordinates[0],
+			title : job.description,
+			subtitle : job.time_estimate + " hours \n$" + job.wage +"\nexpires " + job.expiration,
+			animate : true,
+			leftView: Ti.UI.createButton({title :'contactPoster'}) 
+		});
+	}
+	
+	
 	var osu = MapModule.createAnnotation({
 		latitude : 44.5646,
 		longitude : -123.2757,
@@ -55,21 +87,21 @@ if (osname == 'android') {
 	});
 
 	var map = MapModule.createView({
-		height : '95%',
+		height : '90%',
 		userLocation : true,
 		mapType : MapModule.NORMAL_TYPE,
 		animate : true,
 		region : {
-			latitude : 44.5646,
-			longitude : -123.2757,
+			latitude : lat,
+			longitude : lon,
 			latitudeDelta : 0.1,
 			longitudeDelta : 0.1
 		},
-		height : Titanium.UI.Fill,
+		// height : Titanium.UI.Fill,
 		width : Titanium.UI.Fill,
 		top : 0,
 		left : 0,
-		annotations : [osu]
+		annotations : annot
 	});
 } else {
 
@@ -93,8 +125,8 @@ if (osname == 'android') {
 		mapType : Titanium.Map.STANDARD_TYPE,
 		animate : true,
 		region : {
-			latitude : 44.5646,
-			longitude : -123.2757,
+			latitude : lat,
+			longitude : lon,
 			latitudeDelta : 0.1,
 			longitudeDelta : 0.1
 		},

@@ -32,7 +32,7 @@ exports.createPostWindow = function() {
 	var description_label = Ti.UI.createLabel({
 		color : '#000000',
 		text : 'Job Description',
-		height : 'auto',
+		// height : '50%',
 		width : Ti.UI.FILL
 	});
 
@@ -40,50 +40,47 @@ exports.createPostWindow = function() {
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		color : '#336699',
 		top : 10,
-		left : 10,
-		width : 250,
-		height : 60
+
+		width : Ti.UI.FILL
+
 	});
 
 	// Wage
 	var wage_label = Ti.UI.createLabel({
 		color : '#000000',
 		text : 'Offering Wage',
-		height : 'auto',
+		// height : 'auto',
 		width : Ti.UI.FILL
 	});
 
 	var wage = Ti.UI.createTextField({
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		color : '#336699',
-		top : 10,
-		left : 10,
-		width : 250,
-		height : 60
+
+		width : Ti.UI.FILL
+
 	});
 
 	// Time estimate
 	var estimate_label = Ti.UI.createLabel({
 		color : '#000000',
 		text : 'Time Estimate (hours)',
-		height : 'auto',
+		// height : 'auto',
 		width : Ti.UI.FILL
 	});
 
 	var estimate = Ti.UI.createTextField({
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		color : '#336699',
-		top : 10,
-		left : 10,
-		width : 250,
-		height : 60
+
+		width : Ti.UI.FILL
 	});
 
 	// Expiration date
 	var date_label = Ti.UI.createLabel({
 		color : '#000000',
 		text : 'Expiration date',
-		height : 'auto',
+		// height : 'auto',
 		width : Ti.UI.FILL
 	});
 
@@ -110,7 +107,7 @@ exports.createPostWindow = function() {
 		color : '#000000',
 		title : 'Post',
 		
-		width : 300,
+		width : Ti.UI.FILL,
 		padding : 10
 	});
 
@@ -119,7 +116,7 @@ exports.createPostWindow = function() {
 		color : '#000000',
 		title : 'Cancel',
 		
-		width : 300,
+		width : Ti.UI.FILL,		
 		padding : 10
 	});
 
