@@ -1,4 +1,4 @@
-function clearMyStoredAccessToke() {
+function clearMyStoredAccessToken() {
 	Ti.App.Properties.removeProperty('lastLogin');
 	Ti.App.Properties.removeProperty('accessToken');
 	Ti.App.Properties.removeProperty('tokenExpiresIn');
