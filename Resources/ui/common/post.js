@@ -109,7 +109,7 @@ exports.createPostWindow = function() {
 	var label = Ti.UI.createButton({
 		color : '#000000',
 		title : 'Post',
-		height : 60,
+		
 		width : 300,
 		padding : 10
 	});
@@ -118,7 +118,7 @@ exports.createPostWindow = function() {
 	var cancel = Ti.UI.createButton({
 		color : '#000000',
 		title : 'Cancel',
-		height : 60,
+		
 		width : 300,
 		padding : 10
 	});
