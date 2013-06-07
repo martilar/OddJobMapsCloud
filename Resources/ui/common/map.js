@@ -15,30 +15,32 @@ function mapQuery(view){
 			}	
 	}, function(e, view) {
 		if(e.success){
-			alert('Success:\n' + 'Count: ' + e.jobs.length + e.jobs[0].description+e.jobs[0].coordinates[0]);
+			
 			// var jobs = e.jobs;
 			var annot = new Array();
 			for(var i = 0 ; i < e.jobs.length ; i++ ){
+				alert('Success:\n' + 'Count: ' + e.jobs.length + e.jobs[i].description+e.jobs[i].coordinates[0][0]);
 				if (osname == 'android'){
-				annot[i] = MapModule.createAnnotation({
+				annot.push( MapModule.createAnnotation({
 				latitude : e.jobs[i].coordinates[0][1],
 				longitude : e.jobs[i].coordinates[0][0],
 				title : e.jobs[i].description,
 				subtitle : e.jobs[i].time_estimate + " hours \n$" + e.jobs[i].wage +"\nexpires " + e.jobs[i].expiration,
 				animate : true,
 				leftView: Ti.UI.createButton({title :'contact Poster'}) 
-				});
+				}));
 				} else {
-				annot[i] = Titanium.Map.createAnnotation({
+				view.addAnnotation( Titanium.Map.createAnnotation({
 				latitude : e.jobs[i].coordinates[0][1],
 				longitude : e.jobs[i].coordinates[0][0],
 				title : e.jobs[i].description,
 				subtitle : e.jobs[i].time_estimate + " hours \n$" + e.jobs[i].wage +"\nexpires " + e.jobs[i].expiration,
 				animate : true,
 				leftView: Ti.UI.createButton({title :'contact Poster'}) 
-				});
+				}));
 				}
 			}
+			// Ti.API.Info('annot[o]' + annot[0]);
 			view.addAnnotations(annot);
 			var viewAnnot = view.getAnnotations();
 			alert('viewAnnot ' + viewAnnot[0].title);
