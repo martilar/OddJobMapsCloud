@@ -23,6 +23,7 @@ if (osname == 'android') {
 	});
 
 	var map = MapModule.createView({
+		height : '95%',
 		userLocation : true,
 		mapType : MapModule.NORMAL_TYPE,
 		animate : true,
@@ -55,6 +56,7 @@ if (osname == 'android') {
 	});
 
 	var map = Titanium.Map.createView({
+		height : '95%',		
 		userLocation : true,
 		mapType : Titanium.Map.STANDARD_TYPE,
 		animate : true,
@@ -70,5 +72,14 @@ if (osname == 'android') {
 	});
 }
 win.add(map);
+var backBtn = Ti.UI.createButton({
+	title : 'Back',
+	width : Ti.UI.FILL,
+	 height : Ti.UI.FILL
+});
+backBtn.addEventListener('click', function(){
+	win.close();
+});
+win.add(backBtn);
 	win.open();	
 }
