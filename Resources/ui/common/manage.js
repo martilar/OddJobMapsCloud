@@ -61,7 +61,7 @@ var showEntries = function(view){
 				limit : 1000,
 
 				where : { 
-					"user": user
+					user_id : user.id
 				}	
 			}, function(f) {	
 				if (f.success) {
@@ -75,7 +75,8 @@ var showEntries = function(view){
 						var job = f.jobs[i];
 						var bar = Ti.UI.createView({
 							layout : 'horizontal',
-							width : Ti.UI.FILL	
+							width : Ti.UI.FILL,
+							height : 60	
 						});
 						scroll.add(bar);
 						var delBtn = Ti.UI.createButton({
