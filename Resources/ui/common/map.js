@@ -2,17 +2,24 @@ function mapQuery(view){
 	var osname = Ti.Platform.osname;
 	var Cloud = require('ti.cloud');
 	var region = view.getRegion();
+	Ti.API.info('region' + region.latitude);
+	Ti.API.info('region' + region.longitude);
+	Ti.API.info(region);
 	var lat = region.latitude;
 	var lon = region.longitude;
 	var longdelt = region.longitudeDelta;
-	var radians = 180*longdelt/3.14;
+	var radians = longdelt*3.14/180;
+	var today = new Date();
 	Cloud.debug = true;
 	Ti.API.info(view);
 	jobs = Cloud.Objects.query({
 		classname : 'jobs',
 		limit : 100,
+	
 		where : { 
-			"coordinates":{"$nearSphere":[lon, lat], "$maxDistance" : radians }
+			"coordinates":{"$nearSphere":[lon, lat], "$maxDistance" : radians },
+			"claimed" : false,
+			"expiration" : {"$gt": today}
 			}	
 	}, function(e) {
 		if(e.success){
@@ -64,24 +71,26 @@ exports.createMapWindow = function(){
 
 	var osname = Ti.Platform.osname;
 
-	var lat;
-	var lon;
+	var latitude;
+	var longitude;
 	var	latitudeDelta = 0.1;
 	var	longitudeDelta = 0.1;
 
 	var loc = Ti.Geolocation.getCurrentPosition(function(e) {
 		if (e.error) {
-			alert('Cannot get your current location, using default..');
+			alert('Cannot get your current location, please manually set your location.');
 			latitude = 0;
 			longitude = 0;
 			return;
 		} else {
 			alert('Success getting location');
-			lat = e.coords.latitude;
-			lon = e.coords.longitude;
+			latitude = e.coords.latitude;
+			longitude = e.coords.longitude;
 			return;
 		}
 	});
+	Ti.API.info(latitude);
+	Ti.API.info(longitude);
 	
 
 
@@ -147,8 +156,8 @@ if (osname == 'android') {
 		mapType : Titanium.Map.STANDARD_TYPE,
 		animate : true,
 		region : {
-			latitude : lat,
-			longitude : lon,
+			latitude : latitude,
+			longitude : longitude,
 			latitudeDelta : 0.1,
 			longitudeDelta : 0.1
 		},

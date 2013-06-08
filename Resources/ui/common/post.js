@@ -1,4 +1,31 @@
+var dat = require('/dat');
+var login = require('/ui/common/login');
+
 exports.createPostWindow = function() {
+	var Cloud = require('ti.cloud');
+	Cloud.debug = true;
+	var token = dat.getMyStoredAccessToken();
+	if (token) {
+
+		Cloud.accessToken = token;
+		// Ti.App.fireEvent('loggedIn',{});
+
+	} else {
+
+		Cloud.Users.secureLogin({
+			title : 'Login to your Account'
+		}, function(e) {
+			if (e.success) {
+				dat.setMyStoredAccessToken(Cloud.accessToken, Cloud.expiresIn);
+				// Ti.App.fireEvent('loggedIn',{});
+
+			} else {
+				// alert('Error:\\n' +
+				// ((e.error && e.message) || JSON.stringify(e)));
+			}
+		});
+
+	}
 	var osname = Ti.Platform.osname;
 	
 	var win = Ti.UI.createWindow({
@@ -28,6 +55,8 @@ exports.createPostWindow = function() {
 			return;
 		}
 	});
+		Ti.API.info(latitude);
+	Ti.API.info(longitude);
 	// Manual location button
 	var loc_button = Ti.UI.createButton({
 		color : '#000000',
@@ -272,8 +301,10 @@ exports.createPostWindow = function() {
 			if (e.success) {
 				var job = e.jobs[0];
 				alert('Success:\n' + 'coordinates: ' + job.coordinates + '\n' + 'description: ' + job.description + '\n' + 'expiration: ' + job.expiration + '\n' + 'wage: ' + job.wage + '\n' + 'time_estimate: ' + job.time_estimate + '\n' + 'claimed: ' + job.claimed + '\n' + 'created_at: ' + job.created_at);
+				win.close();
 			} else {
 				alert('Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
+				login.createLoginWindow();
 			}
 		});
 	});
