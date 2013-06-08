@@ -77,65 +77,46 @@ function mapQuery(view) {
 }
 
 exports.createMapWindow = function() {
-	var win = Ti.UI.createWindow({
-		backgroundColor : "white",
-		layout : 'vertical',
-		navBarHidden : true
-	});
-
-	var osname = Ti.Platform.osname;
 
 
-	var latitude;
-	var longitude;
+	
+
+
+	var lat;
+	var lon;
 	var	latitudeDelta = 0.1;
 	var	longitudeDelta = 0.1;
 
 	var loc = Ti.Geolocation.getCurrentPosition(function(e) {
 		if (e.error) {
 			alert('Cannot get your current location, please manually set your location.');
-			latitude = 0;
-			longitude = 0;
-			return;
+			lat = 0;
+			lon = 0;
+			makeMaps(lat, lon);
 		} else {
 			alert('Success getting location\nLatitude' + e.coords.latitude + '\nLongitude ' + e.coords.longitude);
-			latitude = e.coords.latitude;
-			longitude = e.coords.longitude;
+			lat = e.coords.latitude;
+			lon = e.coords.longitude;
 			Ti.API.info('getCurrentPos Map.js')
-			Ti.API.info(latitude);
-			Ti.API.info(longitude);
-	
-			return;
+			Ti.API.info(lat);
+			Ti.API.info(lon);
+			makeMaps(lat, lon);
+			
 		}
+		
 	});
 
-	Ti.API.info(latitude);
-	Ti.API.info(longitude);
+	Ti.API.info(lat);
+	Ti.API.info(lon);
+}
 	
-
-
-// alert(JSON.stringify(jobs));
-var annot = new Array();
-
-
-<<<<<<< HEAD
-	var map = MapModule.createView({
-		height : '90%',
-		userLocation : true,
-		mapType : MapModule.NORMAL_TYPE,
-		animate : true,
-		region : {
-			latitude : latitude,
-			longitude : longitude,
-			latitudeDelta : 0.1,
-			longitudeDelta : 0.1
-		},
-		// height : Titanium.UI.Fill,
-		width : Titanium.UI.Fill,
-		top : 0,
-		left : 0,
-		// annotations : 
-=======
+var makeMaps = function(lat, lon){
+	var win = Ti.UI.createWindow({
+		backgroundColor : "white",
+		layout : 'vertical',
+		navBarHidden : true
+	});
+	var osname = Ti.Platform.osname;
 	// alert(JSON.stringify(jobs));
 	var annot = new Array();
 
@@ -208,7 +189,9 @@ var annot = new Array();
 	win.add(map);
 
 	mapQuery(map);
-
+	
+	win.open();
+	
 	var backBtn = Ti.UI.createButton({
 		title : 'Back',
 		width : Ti.UI.FILL,
@@ -218,4 +201,5 @@ var annot = new Array();
 	backBtn.addEventListener('click', function() {
 		win.close();
 	});
-
+	win.add(backBtn);
+}
