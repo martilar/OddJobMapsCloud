@@ -3,6 +3,7 @@ var nav = require('/ui/common/nav');
 var dat = require('dat');
 var map = require('/ui/common/map');
 var post = require('/ui/common/post');
+var manage = require('ui/common/manage');
 
 function getMyStoredAccessToken(){
 	
@@ -80,6 +81,22 @@ toPostBtn.addEventListener( 'click', function(){
 	var token = dat.getMyStoredAccessToken();
 	if (token){
 		var postWin = post.createPostWindow();
+	} else{
+		var loginWin = login.createLoginWindow();
+	}
+});
+
+var toManageBtn = Ti.UI.createButton({
+	title : 'Manage your jobs',
+
+	width : Ti.UI.FILL
+});
+toLoginWin.add(toManageBtn);
+
+toManageBtn.addEventListener( 'click', function(){
+	var token = dat.getMyStoredAccessToken();
+	if (token){
+		var postWin = manage.createManageWindow();
 	} else{
 		var loginWin = login.createLoginWindow();
 	}

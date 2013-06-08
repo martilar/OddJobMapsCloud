@@ -15,7 +15,7 @@ function mapQuery(view) {
 	
 	Cloud.debug = true;
 	Ti.API.info(view);
-	jobs = Cloud.Objects.query({
+	var jobs = Cloud.Objects.query({
 		classname : 'jobs',
 		limit : 100,
 	
