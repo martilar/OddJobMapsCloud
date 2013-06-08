@@ -42,6 +42,9 @@ exports.createPostWindow = function() {
 	// Get user location
 	var latitude;
 	var longitude;
+	
+	Ti.Geolocation.purpose = Ti.Geolocation.ACTIVITYTYPE_OTHER;
+	
 	var loc = Ti.Geolocation.getCurrentPosition(function(e) {
 		if (e.error) {
 			alert('Cannot get your current location, please manually set your location.');
