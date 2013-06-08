@@ -83,9 +83,13 @@ exports.createMapWindow = function(){
 			longitude = 0;
 			return;
 		} else {
-			alert('Success getting location');
+			alert('Success getting location\nLatitude' + e.coords.latitude + '\nLongitude ' + e.coords.longitude);
 			latitude = e.coords.latitude;
 			longitude = e.coords.longitude;
+			Ti.API.info('getCurrentPos Map.js')
+			Ti.API.info(latitude);
+			Ti.API.info(longitude);
+	
 			return;
 		}
 	});
@@ -123,8 +127,8 @@ if (osname == 'android') {
 		mapType : MapModule.NORMAL_TYPE,
 		animate : true,
 		region : {
-			latitude : lat,
-			longitude : lon,
+			latitude : latitude,
+			longitude : longitude,
 			latitudeDelta : 0.1,
 			longitudeDelta : 0.1
 		},

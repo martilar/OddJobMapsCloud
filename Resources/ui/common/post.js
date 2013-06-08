@@ -49,14 +49,14 @@ exports.createPostWindow = function() {
 			longitude = 0;
 			return;
 		} else {
-			alert('Success getting location');
+			alert('Success getting location ');
 			latitude = e.coords.latitude;
 			longitude = e.coords.longitude;
 			return;
 		}
 	});
-		Ti.API.info(latitude);
-	Ti.API.info(longitude);
+		Ti.API.info('latitude '+latitude);
+	Ti.API.info('longitude '+longitude);
 	// Manual location button
 	var loc_button = Ti.UI.createButton({
 		color : '#000000',
