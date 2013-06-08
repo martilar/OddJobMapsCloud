@@ -6,10 +6,8 @@ exports.getMyStoredAccessToken= function(){
 	if ( loginTime + expiresIn > seconds ){
 		return Ti.App.Properties.getString('token', '');
 	} else {
-		Ti.App.Properties.removeProperty('loginTime');
-		Ti.App.Properties.removeProperty('expires');
-		Ti.App.Properties.removeProperty('token');
-		return '';
+		dat.unsetToken();
+		return false;
 	}
 }
 // 
