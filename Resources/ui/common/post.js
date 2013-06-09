@@ -1,6 +1,8 @@
 var dat = require('/dat');
 var login = require('/ui/common/login');
 
+
+
 exports.createPostWindow = function() {
 	var Cloud = require('ti.cloud');
 	Cloud.debug = true;
@@ -33,6 +35,43 @@ exports.createPostWindow = function() {
 		layout : 'vertical',
 		navBarHidden : true
 	});
+var createWhenPossible = function(e){
+	if( Titanium.Network.networkType != Titanium.Network.NETWORK_NONE){
+		//send update the database
+		createEntry(e);
+	}else{
+	
+	setTimeout(function(){
+		createWhenPossible(e);
+	}, 1000);
+	}
+}
+
+
+var createEntry = function(e) {
+		var Cloud = require('ti.cloud');
+		Cloud.debug = true;
+		Cloud.Objects.create({
+			classname : 'jobs',
+			fields : e
+		}, function(e) {
+			if (e.success) {
+				var job = e.jobs[0];
+				alert('Success:\n' + 'coordinates: ' + job.coordinates + '\n' + 'description: ' + job.description + '\n' + 'expiration: ' + job.expiration + '\n' + 'wage: ' + job.wage + '\n' + 'time_estimate: ' + job.time_estimate + '\n' + 'claimed: ' + job.claimed + '\n' + 'created_at: ' + job.created_at);
+				// fireEvent('Success',{});
+				Ti.API.info(Titanium.UI.currentWindow);
+				win.close();
+			} else {
+				alert('Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
+				login.createLoginWindow();
+			}
+		});
+	};
+
+
+
+
+
 	var self = Ti.UI.createView({
 		layout : 'vertical'
 	});
@@ -288,30 +327,21 @@ exports.createPostWindow = function() {
 
 	self.add(cancel);
 
-	//Add behavior for UI
-	label.addEventListener('click', function(e) {
-		Cloud.Objects.create({
-			classname : 'jobs',
-			fields : {
-				coordinates : [longitude, latitude], // note: these are [long, lat]
-				description : description.value,
-				expiration : picker.value,
-				wage : wage.value,
-				time_estimate : estimate.value,
-				claimed : false
-			}
-		}, function(e) {
-			if (e.success) {
-				var job = e.jobs[0];
-				alert('Success:\n' + 'coordinates: ' + job.coordinates + '\n' + 'description: ' + job.description + '\n' + 'expiration: ' + job.expiration + '\n' + 'wage: ' + job.wage + '\n' + 'time_estimate: ' + job.time_estimate + '\n' + 'claimed: ' + job.claimed + '\n' + 'created_at: ' + job.created_at);
-				win.close();
-			} else {
-				alert('Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
-				login.createLoginWindow();
-			}
-		});
-	});
 
+
+	//Add behavior for UI
+	label.addEventListener('click', function(){
+		var fields = {
+			"coordinates" : [longitude, latitude], // note: these are [long, lat]
+			"description" : description.value,
+			"expiration" : picker.value,
+			"wage" : wage.value,
+			"time_estimate" : estimate.value,
+			"claimed" : false
+		};
+		
+		createWhenPossible(fields);
+	});
 	cancel.addEventListener('click', function(e) {
 		win.close();
 	});
@@ -319,4 +349,6 @@ exports.createPostWindow = function() {
 	win.add(self);
 	win.open();
 }
+
+
 // module.exports = Post;
