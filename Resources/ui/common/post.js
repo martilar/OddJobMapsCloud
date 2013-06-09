@@ -72,8 +72,9 @@ var createEntry = function(e) {
 
 
 
-	var self = Ti.UI.createView({
-		layout : 'vertical'
+	var self = Ti.UI.createScrollView({
+		layout : 'vertical',
+		height : '90%'
 	});
 	var Cloud = require('ti.cloud');
 	Cloud.debug = true;
@@ -307,25 +308,25 @@ var createEntry = function(e) {
 	self.add(estimate);
 	self.add(date_label);
 	self.add(picker);
-
+	win.add(self);
 	var label = Ti.UI.createButton({
 		color : '#000000',
 		title : 'Post',
-
+		height : '5%',
 		width : Ti.UI.FILL,
 		padding : 10
 	});
 
-	self.add(label);
+	win.add(label);
 	var cancel = Ti.UI.createButton({
 		color : '#000000',
 		title : 'Cancel',
-
+		height : '5%',
 		width : Ti.UI.FILL,
 		padding : 10
 	});
 
-	self.add(cancel);
+	win.add(cancel);
 
 
 
@@ -346,7 +347,7 @@ var createEntry = function(e) {
 		win.close();
 	});
 
-	win.add(self);
+	
 	win.open();
 }
 
