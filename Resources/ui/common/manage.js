@@ -35,6 +35,7 @@ exports.createManageWindow = function() {
 	showEntries(view);
 	
 	win.open();
+
 	var backBtn = Ti.UI.createButton({
 		title : 'Back',
 		width : Ti.UI.FILL,
@@ -65,7 +66,7 @@ var showEntries = function(view){
 				}	
 			}, function(f) {	
 				if (f.success) {
-					var scroll = Ti.UI.createScrollView({
+					var table = Ti.UI.createTableView({
 						width : Ti.UI.FILL,
 						height : Ti.UI.FILL,
 						layout : 'vertical'
@@ -73,12 +74,11 @@ var showEntries = function(view){
 					var rows = new Array();
 					for (var i = 0 ; i < f.jobs.length ; i++ ){
 						var job = f.jobs[i];
-						var bar = Ti.UI.createView({
+						var row = Ti.UI.createTableViewRow({
 							layout : 'horizontal',
 							width : Ti.UI.FILL,
-							height : 60	
+							height : Ti.UI.SIZE
 						});
-						scroll.add(bar);
 						var delBtn = Ti.UI.createButton({
 							title : 'delete',
 							width : '10%'
@@ -97,13 +97,14 @@ var showEntries = function(view){
 								}
 							});
 						});
-						bar.add( delBtn);
-						view.add( Ti.UI.createLabel({
+						// row.add( delBtn);
+						var label =  Ti.UI.createLabel({
+							height : Ti.UI.SIZE,
 							width : '80%',
 							text: job.description +'  '+job.wage+'  '+job.time_estimate+"\n"+job.expiration+'  Claimed '+job.claimed
-						}));
+						});
 						
-						
+						row.add(label);
 						var claimBtn = Ti.UI.createButton({
 							title :'mark claimed',
 							width : '10%'
@@ -125,14 +126,24 @@ var showEntries = function(view){
 								}
 							});
 						});
-						bar.add( claimBtn);			
+						// row.add( claimBtn);	
+						Ti.API.info(row);
+						Ti.API.info(label.text);
+						rows.push(row);		
 					} // end of for each job loop for loop
 				}else{	//	end of if success loop funcrtion(f)
 					
 					alert('Error:\n' +
    				 ((e.error && e.message) || JSON.stringify(e)));				
 				}
+				Ti.API.info(row);
+				
+				table.data = rows;
+				view.add(table);
+				Ti.API.info(rows);
+				Ti.API.info(table.data);
 			}); //end of function f
+			
 		}// end of if e success	
 		 else{
 			alert('Error:\n' +
