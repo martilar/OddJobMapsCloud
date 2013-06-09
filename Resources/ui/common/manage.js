@@ -76,8 +76,8 @@ var showEntries = function(view){
 						var job = f.jobs[i];
 						var row = Ti.UI.createTableViewRow({
 							layout : 'horizontal',
-							width : Ti.UI.FILL,
-							height : Ti.UI.SIZE
+							height : Ti.UI.SIZE,
+							width : "100%"
 						});
 						var delBtn = Ti.UI.createButton({
 							title : 'delete',
@@ -109,7 +109,7 @@ var showEntries = function(view){
 						var claimBtn = Ti.UI.createButton({
 							title :'mark claimed',
 							// width : '10%'
-							right : 0
+						
 						});
 						claimBtn.addEventListener('click', function(){
 							Cloud.Objects.update({
