@@ -123,7 +123,7 @@ var showEntries = function(view) {
 						});
 						claimBtn[i].addEventListener('click', function() {
 							var claimVal;
-							if (claimBtn.title == 'Claim') {
+							if (this.title == 'Claim') {
 								claimVal = true;
 							} else {
 								claimVal = false;
