@@ -114,7 +114,7 @@ var showEntries = function(view) {
 							claimButton = 'Claim';
 							claimColor = 'green';
 						}
-						claimBtn = Ti.UI.createButton({
+						claimBtn[i] = Ti.UI.createButton({
 							title : claimButton,
 							width : '25%',
 							right : '20%',
@@ -150,7 +150,6 @@ var showEntries = function(view) {
 						row.add(claimBtn[i]);
 						Ti.API.info(row);
 						Ti.API.info(label.text);
-						Ti.API.info(jID[i]);
 						rows.push(row);
 					} // end of for each job loop for loop
 				} else {//	end of if success loop funcrtion(f)
