@@ -81,7 +81,7 @@ var showEntries = function(view){
 						});
 						var delBtn = Ti.UI.createButton({
 							title : 'delete',
-							width : '10%'
+							// width : '10%'
 						});
 						delBtn.addEventListener('click', function(){
 							Cloud.Objects.remove({
@@ -89,7 +89,8 @@ var showEntries = function(view){
 								id : job.id
 							}, function(g) {
 								if(g.success){
-									scroll.close();
+									view.removeAllChildren();
+									// table.close();
 									showEntries(view);	
 								}	else {
 									alert('Error:\n' +
@@ -97,17 +98,18 @@ var showEntries = function(view){
 								}
 							});
 						});
-						// row.add( delBtn);
+						row.add( delBtn);
 						var label =  Ti.UI.createLabel({
 							height : Ti.UI.SIZE,
-							width : '80%',
+							// width : '80%',
 							text: job.description +'  '+job.wage+'  '+job.time_estimate+"\n"+job.expiration+'  Claimed '+job.claimed
 						});
 						
 						row.add(label);
 						var claimBtn = Ti.UI.createButton({
 							title :'mark claimed',
-							width : '10%'
+							// width : '10%'
+							right : 0
 						});
 						claimBtn.addEventListener('click', function(){
 							Cloud.Objects.update({
@@ -118,7 +120,8 @@ var showEntries = function(view){
 								}
 							}, function(g) {
 								if(g.success){
-									scroll.close();
+									view.removeAllChildren();
+									// table.close();
 									showEntries(view);	
 								}	else {
 									alert('Error:\n' +
@@ -126,7 +129,7 @@ var showEntries = function(view){
 								}
 							});
 						});
-						// row.add( claimBtn);	
+						row.add( claimBtn);	
 						Ti.API.info(row);
 						Ti.API.info(label.text);
 						rows.push(row);		
